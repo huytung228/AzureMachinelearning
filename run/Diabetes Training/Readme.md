@@ -5,3 +5,5 @@ Learn:
 - submit training from script
 - upload data to data store
 - create tabular dataset from csv file in datastore
+- Register trained models
+- add param to training script
