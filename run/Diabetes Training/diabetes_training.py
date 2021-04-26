@@ -8,13 +8,27 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import roc_curve
+import argparse
+from azureml.core import Dataset
 
 # Get the experiment run context
 run = Run.get_context()
 
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    '--data_path',
+    type=str,
+    help='Path to the training data'
+)
+args = parser.parse_args()
+
 # load the diabetes dataset
 print("Loading Data...")
-diabetes = pd.read_csv('diabetes.csv')
+# data_path = '/home/tung/AzureMachinelearning/data/diabetes.csv'
+# # diabetes = pd.read_csv(data_path)
+ws = run.experiment.workspace
+dataset = Dataset.get_by_id(ws, id=args.data_path)
+diabetes = dataset.to_pandas_dataframe()
 
 # Separate features and labels
 X, y = diabetes[['Pregnancies','PlasmaGlucose','DiastolicBloodPressure','TricepsThickness','SerumInsulin','BMI','DiabetesPedigree','Age']].values, diabetes['Diabetic'].values
